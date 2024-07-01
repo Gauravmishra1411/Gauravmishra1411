@@ -1,25 +1,56 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
+import React from "react";
+import ReactDOM from "react-dom/client";
+import Header from "./components/Header";
+import Body from "./components/Body";
+import Footer from "./components/Footer";
+import About from "./components/About";
+import Error from "./components/Error";
+// import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import Contact from "./components/Contact";
+import RestaurantMenu from "./components/RestrauntMenu";
+import Profile from "./components/Profile";
+const AppLayout = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header />
+      <Outlet />
+      <Footer />
+    </>
   );
-}
+};
+const appRouter = createBrowserRouter([
+  {
+    path: "/",
+    element: <AppLayout />,
+    errorElement: <Error />,
+    children: [
+      {
+        path: "/about",
+        path: "/about", // parentPath/{path} => localhost:1244/about
+        element: <About />,
+        children: [
+          {
+            path: "profile", // parentPath/{path} => localhost:1244/about/profile
+            element: <Profile />,
+          },
+        ],
+      },
+      {
+        path: "/",
+        element: <Body />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
+      },
+      {
+        path: "/restaurant/:resId",
+        element: <RestaurantMenu />,
+      },
+    ],
+  },
+]);
+const root = ReactDOM.createRoot(document.getElementById("root"));
+// root.render(<AppLayout />);
 
-export default App;
+root.render(<RouterProvider router={appRouter} />);
